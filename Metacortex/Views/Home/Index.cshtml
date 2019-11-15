@@ -1,0 +1,225 @@
+﻿@{
+
+}
+
+
+
+<head>
+    <script src="~/Scripts/ChartJs/Chart.min.js"></script>
+
+
+
+</head>
+
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <!--Date Select-->
+        <div class="col my-sidebar">
+            <div class="row">
+                @Html.DropDownList("NameList", new SelectList(ViewBag.NameList), new { @class = "form-control dovizDropDownClass", @id = "dovizDropDownId" })
+
+            </div>
+            <div class="row">
+                <span class="label label-default col mt-2">Başlangıç Tarihi</span>
+                <input id="date-input" class="form-control border border-success col " type="date">
+            </div>
+            <div class="row mt-2">
+                <span class="label label-default col">Bitiş Tarihi</span>
+                <input id="date-input2" class="form-control border border-danger col" type="date">
+            </div>
+
+            <div class="row mb-2">
+                <button id="submit" class="form-control p-2 btn border border-success btn btn-success col-lg-12 ">Göster</button>
+            </div>
+        </div>
+        <!--End Of Date Select-->
+
+        <div style="width:100%;">
+            <canvas id="myChart"></canvas>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+<script>
+    // random color
+    function random_bg_color() {
+        var x = Math.floor(Math.random() * 256);
+        var y = Math.floor(Math.random() * 256);
+        var z = Math.floor(Math.random() * 256);
+        var bgColor = "rgba(" + x + "," + y + "," + z + ",0.1)";
+        return bgColor;
+    }
+    function random_bg_color_border() {
+        var x = Math.floor(Math.random() * 256);
+        var y = Math.floor(Math.random() * 256);
+        var z = Math.floor(Math.random() * 256);
+        var bgColor = "rgba(" + x + "," + y + "," + z + ",1)";
+        return bgColor;
+    }
+</script>
+<script>
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [' '],
+            datasets: [{
+                label: 'Forex Buying',
+                data: [0],
+                backgroundColor:random_bg_color(),
+                borderColor: random_bg_color_border(),
+                borderWidth: 1
+            },
+            {
+                label: 'Forex Selling',
+                data: [0],
+                backgroundColor:random_bg_color(),
+                borderColor: random_bg_color_border(),
+                borderWidth: 1
+                },
+            {
+                label: 'Banknote Buying',
+                data: [0],
+                backgroundColor:random_bg_color(),
+                borderColor: random_bg_color_border(),
+                borderWidth: 1
+                },
+            {
+                label: 'Banknote Selling',
+                data: [0],
+                backgroundColor:random_bg_color(),
+                borderColor: random_bg_color_border(),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+
+                        beginAtZero: false
+                    }
+                }]
+            }
+        }
+    });
+
+    // tarih seçimine göre json datalarını getiren ajax kodu---------------
+    $('#submit').on('click', function () {
+
+        var dateStart = new Date($('#date-input').val());
+        //day = dateStart.getDate();
+        day = ("0" + dateStart.getDate()).slice(-2) // two digit day 1=> 01
+        month = dateStart.getMonth() + 1;
+        year = dateStart.getFullYear();
+        var startDate = [day, month, year].join('.');
+
+
+
+
+        var dateEnd = new Date($('#date-input2').val());
+        //day = dateEnd.getDate();
+        day = ("0" + dateEnd.getDate()).slice(-2) // two digit day 1=> 01
+        month = dateEnd.getMonth() + 1;
+        year = dateEnd.getFullYear();
+        var endDate = [day, month, year].join('.');
+
+
+
+
+        // belirli bir tarih seçimi yapılmış (Mutlaka 2 tarih olmalı 1 tarih yanlış olsa bile bu methoda giremez)
+        if (!startDate.includes("NaN") && !endDate.includes("NaN")) {
+
+            // tarih kontrolü yapılır
+            if (dateStart> dateEnd) {
+                alert("Başlangıç Tarihi ,Bitiş tarihinden büyüktür !");
+            }
+            else {
+                var dovizDropDown = document.getElementById("dovizDropDownId");
+                var dovizName = dovizDropDown.options[dovizDropDown.selectedIndex].value;
+
+                // url parametreleri
+                var data = {
+                    doviz: dovizName,
+                    startDate: startDate,
+                    endDate: endDate
+                };
+
+                // ajax ile sorgu atılır
+             $.ajax({
+                     type: "POST",
+                     url: '@Url.Action("GetDovizDatas","Home")',
+                     data: JSON.stringify(data),
+                     cache: true,
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     success: function (data) {
+
+                         var returnedData = data;
+
+                         myChart.data.datasets[0].label = "Forex Buying";
+                         myChart.data.datasets[1].label = "Forex Selling";
+                         myChart.data.datasets[2].label = "Banknote Buying";
+                         myChart.data.datasets[3].label = "Banknote Selling";
+
+                         var dateLabels = new Array(); // tarih dizisi
+                         var forexBuyingValues = new Array(); // forex buying dizisi dizisi
+                         var forexSellingValues = new Array(); // forex selling dizisi
+                         var banknoteBuyingValues = new Array(); // banknote buying dizisi
+                         var banknoteSellingValues = new Array(); // banknote selling dizisi
+
+
+                         // döndürülen verilerin sayısı kadar veriler yeni data verilerine pushlanır
+                         for (var i = 0; i < returnedData.length; i++) {
+                              dateLabels.push(returnedData[i].Date);
+                              forexBuyingValues.push(returnedData[i].ForexBuying);
+                              forexSellingValues.push(returnedData[i].ForexSelling);
+                              banknoteBuyingValues.push(returnedData[i].BanknoteBuying);
+                              banknoteSellingValues.push(returnedData[i].BanknoteSelling);
+                         }
+
+                         // yeni veriler gtrafikde gösterilir
+                          myChart.data.labels = dateLabels;
+                          myChart.data.datasets[0].data = forexBuyingValues;
+                          myChart.data.datasets[1].data = forexSellingValues;
+                          myChart.data.datasets[2].data = banknoteBuyingValues;
+                          myChart.data.datasets[3].data = banknoteSellingValues;
+
+
+                         // grafik update edilir
+                         myChart.update();
+
+                    }
+
+                 });
+            }
+
+
+
+        }
+        // eğer belirli bir tarih seçimi yapılmamış ise
+        else {
+            alert("eksik tarih");
+
+
+
+        }
+
+    });
+    //------------------------------------------------------------------------
+
+</script>
+
+
