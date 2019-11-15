@@ -27,6 +27,7 @@ namespace Metacortex.helper
             {
                 try
                 {
+
                     //www.tcmb.gov.tr/kurlar/201909/01092019.xml  => tam url bu şekilde
                     xml.Load("https://www.tcmb.gov.tr/kurlar/" + day.ToString("yyyyMM") + "/" + day.ToString("ddMMyyyy") + ".xml"); // bağlantı kuruyoruz.
 
