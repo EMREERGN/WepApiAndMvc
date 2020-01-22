@@ -10,7 +10,7 @@ Nasıl Çalışır ?
 5) Para birimi değiştirlip grafik güncellenmek istenirse tekrardan "Göster" butonuna basılmalıdır
 6) uygulama 2 projeden oluşmaktadır; 1) Wep Api : uygulamanın verileri bu apiden çekilir , 2)Mvc : uygulamanın arayüzü olup sizin kullanacağız arayüzdür.
 
-Notlar:
+Notlar: 
 
 ->Tarih Kontrolleri yapıldı (Tarih mutlaka seçilmeli , bitiş Tarihi başlangıç Tarihinden küçük olmamalı)
 ->Cacheleme sistemi ile tekrar tekrar request atılması engellenip daha önceki Json Verileri getirildi
