@@ -4,12 +4,24 @@
 
 
 
-<head>
-    <script src="~/Scripts/ChartJs/Chart.min.js"></script>
+    <head>
+        <script src="~/Scripts/ChartJs/Chart.min.js"></script>
 
+        <!--custom css-->    
+        <style>
+            .myCustomButtonClass{
+                margin-top:40px;
+                margin-bottom:40px;
+            }
 
+            .myUpSelecterClass{
+                margin-bottom:10px;
+              
+            }
 
-</head>
+        </style>
+
+    </head>
 
 
 <div class="container">
@@ -17,20 +29,20 @@
         <!--Date Select-->
         <div class="col my-sidebar">
             <div class="row">
-                @Html.DropDownList("NameList", new SelectList(ViewBag.NameList), new { @class = "form-control dovizDropDownClass", @id = "dovizDropDownId" })
+                @Html.DropDownList("NameList", new SelectList(ViewBag.NameList), new { @class = "form-control dovizDropDownClass myUpSelecterClass", @id = "dovizDropDownId" })
 
             </div>
-            <div class="row">
+            <div class="row myUpSelecterClass">
                 <span class="label label-default col mt-2">Başlangıç Tarihi</span>
                 <input id="date-input" class="form-control border border-success col " type="date">
             </div>
-            <div class="row mt-2">
-                <span class="label label-default col">Bitiş Tarihi</span>
+            <div class="row mt-2 myUpSelecterClass">
+                <span class="label label-default col ">Bitiş Tarihi</span>
                 <input id="date-input2" class="form-control border border-danger col" type="date">
             </div>
 
             <div class="row mb-2">
-                <button id="submit" class="form-control p-2 btn border border-success btn btn-success col-lg-12 ">Göster</button>
+                <button id="submit" class="form-control p-2 btn border border-success btn btn-success col-lg-12 myCustomButtonClass">Göster</button>
             </div>
         </div>
         <!--End Of Date Select-->
