@@ -4,6 +4,7 @@ using Metacortex.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
@@ -15,6 +16,8 @@ namespace Metacortex.Controllers
 {
     public class HomeController : Controller
     {
+        // veri tabanı bağlantısı
+        wepApiMvcDbEntities db = new wepApiMvcDbEntities();
         // Wep Api Bağlantısı kurulur
         HttpClient wepApiClient = new HttpClient();
         static Uri uri;
@@ -34,6 +37,11 @@ namespace Metacortex.Controllers
 
         public JsonResult GetDovizDatas(string doviz, string startDate, string endDate)
         {
+
+            // istenilen verileri veri tabanına kaydeden methot
+            saveDataOnDb(doviz, startDate, endDate);
+
+
             // request için string düzenlemeleri
             string _doviz = doviz.Replace(" ", "_");
             string _startDate = startDate.Replace(".", "_");
@@ -80,13 +88,30 @@ namespace Metacortex.Controllers
 
         }
 
+        private void saveDataOnDb(string doviz, string startDate, string endDate)
+        {
+            DovizTable dovizTable = new DovizTable();
+            
+            dovizTable.Doviz = doviz;
+            dovizTable.StartDate = startDate;
+            dovizTable.EndDate = endDate;
+            dovizTable.QueryDate = DateTime.Now; // Veri analizi için sorgunun çekildiği tarih veri tabanına kaydedilir
+
+            if (ModelState.IsValid)
+            {
+                db.DovizTable.Add(dovizTable);
+                try
+                {
+                    db.SaveChangesAsync();
+                }catch(Exception ex)
+                {
+                    var deneme = ex.Message.ToString();
+
+                }
+
+            }
 
 
-
-
-
-
-
-
+        }
     }
 }

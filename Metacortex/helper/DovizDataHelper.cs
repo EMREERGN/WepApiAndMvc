@@ -10,8 +10,6 @@ namespace Metacortex.helper
     public class DovizDataHelper
     {
 
-
-
         public List<Doviz> getDovizDatas(string doviz, string startDate, string endDate)
         {
             var dayList = GetDatesBetween(startDate, endDate);
