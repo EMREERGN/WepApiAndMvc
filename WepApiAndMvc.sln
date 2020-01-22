@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metacortex", "Metacortex\Metacortex.csproj", "{B9C2CE55-4976-4D22-992C-AF9162F6A583}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvc", "Metacortex\Mvc.csproj", "{B9C2CE55-4976-4D22-992C-AF9162F6A583}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WepApi", "WepApi\WepApi.csproj", "{5522A4A2-1C4F-4226-A687-7F1CF9117C0B}"
 EndProject
