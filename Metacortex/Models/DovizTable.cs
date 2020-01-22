@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Mvc.Models
+namespace Metacortex.Models
 {
     using System;
     using System.Collections.Generic;
